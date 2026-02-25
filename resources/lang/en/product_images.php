@@ -1,0 +1,41 @@
+<?php
+
+return [
+    'title' => 'Product Images',
+    'subtitle' => 'Manage product images',
+    'add_image' => 'Add Image',
+    'create_image' => 'Create Image',
+    'edit_image' => 'Edit Image',
+    'update_image' => 'Update Image',
+    'no_images_found' => 'No product images found',
+    'image_created' => 'Product image created successfully',
+    'image_updated' => 'Product image updated successfully',
+    'image_deleted' => 'Product image deleted successfully',
+    'image_required' => 'Image is required when creating.',
+    'table' => [
+        'image' => 'Image',
+        'product' => 'Product',
+        'position' => 'Position',
+        'caption' => 'Caption',
+    ],
+    'form' => [
+        'product' => 'Product',
+        'product_placeholder' => 'Select product',
+        'variation' => 'Variation',
+        'variation_placeholder' => 'Select variation (optional)',
+        'variation_option' => 'Variation #:id',
+        'position' => 'Position',
+        'position_placeholder' => '0',
+        'caption' => 'Caption',
+        'caption_placeholder' => 'Enter caption',
+        'image' => 'Image',
+        'upload_image' => 'Upload Image',
+        'upload_image_text' => 'Drop image or click to browse (max 2MB)',
+    ],
+    'messages' => [
+        'create_subtitle' => 'Add a new product image',
+        'edit_subtitle' => 'Edit product image',
+    ],
+    'delete_confirmation_title' => 'Delete Product Image',
+    'delete_confirmation_text' => 'Are you sure you want to delete this product image?',
+];

@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'title' => 'Order Statuses',
+    'subtitle' => 'Manage order statuses and their configurations',
+    'add_order_status' => 'Add Order Status',
+    'edit_order_status' => 'Edit Order Status',
+    'create_order_status' => 'Create Order Status',
+    'update_order_status' => 'Update Order Status',
+    'no_order_statuses_found' => 'No order statuses found',
+    'no_name' => 'No name',
+    'table' => [
+        'name' => 'Name',
+        'color' => 'Color',
+        'icon' => 'Icon',
+        'sends_email' => 'Sends Email',
+        'email_template' => 'Email Template',
+    ],
+    'form' => [
+        'name' => 'Status Name',
+        'name_placeholder' => 'Enter status name (e.g., Pending, Shipped, Delivered)',
+        'color' => 'Color',
+        'color_placeholder' => 'Select a color for this status',
+        'icon' => 'Icon',
+        'icon_placeholder' => 'Enter icon HTML or emoji',
+        'icon_help' => 'You can use HTML icons or emojis (e.g., 📦, 🚚, ✅)',
+        'email_settings' => 'Email Settings',
+        'sends_email' => 'Send email when order reaches this status',
+        'email_template' => 'Email Template',
+        'email_template_placeholder' => 'Enter email template name',
+    ],
+    'messages' => [
+        'create_subtitle' => 'Create a new order status',
+        'edit_subtitle' => 'Edit order status configuration',
+    ],
+    'order_status_created' => 'Order status created successfully',
+    'order_status_updated' => 'Order status updated successfully',
+    'order_status_deleted' => 'Order status deleted successfully',
+    'cannot_delete_native' => 'Cannot delete native order status',
+    'name_required' => 'At least one language name is required',
+    'delete_confirmation_title' => 'Delete Order Status',
+    'delete_confirmation_text' => 'Are you sure you want to delete this order status? This action cannot be undone.',
+];
