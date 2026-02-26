@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('client_secret')->nullable();
             $table->string('redirect_url')->nullable();
             $table->boolean('is_active')->default(false);
+            $table->string('icon_path')->nullable();
             $table->timestamps();
         });
     }
