@@ -539,7 +539,7 @@ class Product extends Model
         int $quantity = 1,
         bool $with_taxes = false,
         ?int $currencyId = null,
-        ?int $clientGroupId = null,
+        ?array $clientGroupIds = null,
         ?int $customerId = null,
     ): array {
         $currencyId = $currencyId ?? Currency::getCurrentCurrency()?->id;
@@ -549,7 +549,7 @@ class Product extends Model
             'tax' => null,
         ];
         //filter by specific prices
-        $data['price_without_taxes'] = self::applySpecificPrices($productId, $variationId, $price, $quantity, $currencyId, $clientGroupId, $customerId);
+        $data['price_without_taxes'] = self::applySpecificPrices($productId, $variationId, $price, $quantity, $with_taxes, $currencyId, $clientGroupIds, $customerId);
         if ($with_taxes) {
             $data = self::applyTaxes($data['price_without_taxes']);
         }
@@ -563,7 +563,7 @@ class Product extends Model
         int $quantity = 1,
         bool $with_taxes = false,
         ?int $currencyId = null,
-        ?int $clientGroupId = null,
+        ?array $clientGroupIds = null,
         ?int $customerId = null
     )
     {
@@ -573,13 +573,9 @@ class Product extends Model
                     ->orWhere('id_currency', 0)
                     ->orWhereNull('id_currency');
             })
-            ->where(function ($query) use ($clientGroupId) {
-                if ($clientGroupId) {
-                    $query->where('id_client_type', $clientGroupId)
-                        ->orWhere('id_client_type', 0)
-                        ->orWhereNull('id_client_type');
-                } else {
-                    $query->where('id_client_type', 0)
+            ->where(function ($query) use ($clientGroupIds) {
+                if ($clientGroupIds) {
+                    $query->whereIn('id_client_type', $clientGroupIds)
                         ->orWhereNull('id_client_type');
                 }
             })

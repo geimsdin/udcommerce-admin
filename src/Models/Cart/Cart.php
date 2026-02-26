@@ -189,7 +189,12 @@ class Cart extends Model
                             $price = $variation->price;
                         }
                     }
-                    $price = Product::getPrice($detail->product_id, $detail->variation_id, $price, 1, true, Currency::getCurrentCurrency()->id, $cart->client_id, $cart->guest_id);
+                    if(isset($cart->client_id)) {
+                        $clientGroupIds = Client::find($cart->client_id)->groups()->pluck('id')->toArray();
+                    } else {
+                        $clientGroupIds = null;
+                    }
+                    $price = Product::getPrice($detail->product_id, $detail->variation_id, $price, 1, true, Currency::getCurrentCurrency()->id, $clientGroupIds);
                     $product_data[$key]['product_price'] = $price['price_with_taxes'];
                 }
 
@@ -358,27 +363,67 @@ class Cart extends Model
                 return null;
             }
             $cart_id = $cart->id;
+        } else {
+            $cart = self::find($cart_id);
         }
 
-        // Calculate total with consideration for variation prices
-        // If variation_id is not 0, use variation price, otherwise use product price
-        $result = DB::table('cart_details as cd')
+        if (!$cart) {
+            return null;
+        }
+
+        $cart->loadMissing('client.groups');
+
+        $details = DB::table('cart_details as cd')
             ->leftJoin('products as p', 'cd.product_id', '=', 'p.id')
             ->leftJoin('variations as v', function ($join) {
                 $join->on('cd.variation_id', '=', 'v.id')
                     ->where('cd.variation_id', '>', 0);
             })
             ->where('cd.cart_id', $cart_id)
-            ->selectRaw('
-                SUM(cd.quantity) as total_quantity,
-                SUM(cd.quantity * CASE 
-                    WHEN cd.variation_id > 0 AND v.price IS NOT NULL AND v.price > 0 THEN v.price 
-                    ELSE p.price 
-                END) as total_amount_no_taxes
-            ')
-            ->first();
-        $tax = Product::applyTaxes($result->total_amount_no_taxes);
-        $taxes = $tax['price_with_taxes'] - $tax['price_without_taxes'];
+            ->select(
+                'cd.product_id',
+                'cd.variation_id',
+                'cd.quantity',
+                DB::raw('CASE WHEN cd.variation_id > 0 AND v.price IS NOT NULL AND v.price > 0 THEN v.price ELSE p.price END as base_price')
+            )
+            ->get();
+
+        $totalQuantity = 0;
+        $totalAmountNoTaxes = 0.0;
+
+        $currencyId = $cart->currency_id ?? Currency::getCurrentCurrency()?->id;
+        $clientGroupIds = $cart->client?->groups->pluck('id')->toArray() ?: [];
+        $customerId = $cart->client_id;
+
+        foreach ($details as $row) {
+            $basePrice = (float) ($row->base_price ?? 0);
+            $qty = (int) $row->quantity;
+            $unitPrice = Product::applySpecificPrices(
+                (int) $row->product_id,
+                (int) $row->variation_id ?: null,
+                $basePrice,
+                $qty,
+                false,
+                $currencyId,
+                $clientGroupIds ?: null,
+                $customerId
+            );
+            $totalQuantity += $qty;
+            $totalAmountNoTaxes += $qty * $unitPrice;
+        }
+
+        $result = (object) [
+            'total_quantity' => $totalQuantity,
+            'total_amount_no_taxes' => $totalAmountNoTaxes,
+        ];
+
+        $taxes = 0;
+        $tax = null;
+        if(isset($result->total_amount_no_taxes)) {
+            $tax = Product::applyTaxes($result->total_amount_no_taxes);
+            $taxes = $tax['price_with_taxes'] - $tax['price_without_taxes'];
+            $tax = $tax['tax'];
+        }
 
         // Shipping cost from session (set in Step 3)
         $shipping = session('checkout.shipping_method.price', 0);
@@ -391,8 +436,7 @@ class Cart extends Model
         $result->shipping_cost = round($shipping, 2);
         $result->payment_fee = round($paymentFee, 2);
         $result->grand_total = round($shipping + $paymentFee + $taxes + $result->total_amount_no_taxes, 2);
-        $result->tax = $tax['tax'];
-        return $result;
+        $result->tax = $tax;
 
         return $result;
     }
