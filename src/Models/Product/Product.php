@@ -14,8 +14,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
+use Unusualdope\LaravelEcommerce\Models\Administration\Currency;
 use Unusualdope\LaravelEcommerce\Models\Stock\Stock;
 use Unusualdope\LaravelEcommerce\Models\Stock\Variation;
+use Unusualdope\LaravelEcommerce\Models\Tax\Tax;
 use Unusualdope\LaravelModelTranslatable\Traits\HasTranslation;
 
 class Product extends Model
@@ -519,44 +521,192 @@ class Product extends Model
         return $features;
     }
 
-    /**
-     * Retrieve the product's price based on season, stock, or default product pricing.
+        /**
+     * Calculate the price for this product including specific price rules.
+     * Returns the base price with the best applicable specific price applied (in base currency).
      *
-     * @param  int  $product_id  The product ID to fetch the price for.
-     * @param  int|null  $stock_id  (Optional) Stock ID for stock-specific pricing.
-     * @param  int|null  $season_id  (Optional) Season ID for season-specific pricing.
-     * @param  bool  $with_taxes  (Optional) Whether the price should include taxes.
-     * @return float The calculated price, or 0 if no valid price is found.
+     * @param  float  $basePrice  Base price from product or variation
+     * @param  int  $quantity  Quantity for quantity-based specific prices
+     * @param  int|null  $currencyId  Currency ID (default: current currency)
+     * @param  int|null  $clientGroupId  Client group ID for group-specific prices
+     * @param  int|null  $customerId  Customer ID for customer-specific prices
+     * @return float
      */
-    public static function getPrice(int $product_id, ?int $stock_id = null, ?int $season_id = null, bool $with_taxes = false): float
-    {
-        // Fetch the product
-        $product = static::find($product_id);
-        if (!$product) {
-            return 0.0; // Return 0 if product is not found
+    public static function getPrice(
+        int $productId,
+        ?int $variationId = null,
+        ?float $price = null,
+        int $quantity = 1,
+        bool $with_taxes = false,
+        ?int $currencyId = null,
+        ?int $clientGroupId = null,
+        ?int $customerId = null,
+    ): array {
+        $currencyId = $currencyId ?? Currency::getCurrentCurrency()?->id;
+        $data = [
+            'price_without_taxes' => $price,
+            'price_with_taxes' => $price,
+            'tax' => null,
+        ];
+        //filter by specific prices
+        $data['price_without_taxes'] = self::applySpecificPrices($productId, $variationId, $price, $quantity, $currencyId, $clientGroupId, $customerId);
+        if ($with_taxes) {
+            $data = self::applyTaxes($data['price_without_taxes']);
         }
-
-        // Check season-specific pricing if season_id is provided
-        if (!empty($season_id)) {
-            $seasonPrice = self::getSeasonPrice($product_id, $season_id);
-            if ($seasonPrice !== null) {
-                return $with_taxes ? self::applyTaxes($seasonPrice) : $seasonPrice;
-            }
-        }
-
-        // Check stock-specific pricing if stock_id is provided
-        if (!empty($stock_id)) {
-            $stockPrice = self::getStockPrice($stock_id);
-            if ($stockPrice !== null) {
-                return $with_taxes ? self::applyTaxes($stockPrice) : $stockPrice;
-            }
-        }
-
-        // Default to product price
-        $productPrice = $product->price > 0 ? (float) $product->price : 0.0;
-
-        return $with_taxes ? self::applyTaxes($productPrice) : $productPrice;
+        return $data;
     }
+
+    public static function applySpecificPrices(
+        int $productId,
+        int $variationId = null,
+        ?float $basePrice = null,
+        int $quantity = 1,
+        bool $with_taxes = false,
+        ?int $currencyId = null,
+        ?int $clientGroupId = null,
+        ?int $customerId = null
+    )
+    {
+        $specificPrices = SpecificPrice::where('id_product', $productId)
+            ->where(function ($query) use ($currencyId) {
+                $query->where('id_currency', $currencyId)
+                    ->orWhere('id_currency', 0)
+                    ->orWhereNull('id_currency');
+            })
+            ->where(function ($query) use ($clientGroupId) {
+                if ($clientGroupId) {
+                    $query->where('id_client_type', $clientGroupId)
+                        ->orWhere('id_client_type', 0)
+                        ->orWhereNull('id_client_type');
+                } else {
+                    $query->where('id_client_type', 0)
+                        ->orWhereNull('id_client_type');
+                }
+            })
+            ->where(function ($query) use ($customerId) {
+                if ($customerId) {
+                    $query->where('id_customer', $customerId)
+                        ->orWhere('id_customer', 0);
+                } else {
+                    $query->where('id_customer', 0)
+                        ->orWhereNull('id_customer');
+                }
+            })
+            ->where(function ($query) use ($quantity) {
+                $query->where('from_quantity', '<=', $quantity)
+                    ->orWhereNull('from_quantity')
+                    ->orWhere('from_quantity', 0);
+            })
+            ->where(function ($query) {
+                $query->where(function ($q) {
+                    $q->where('from', '<=', now())
+                        ->orWhereNull('from');
+                })
+                    ->where(function ($q) {
+                        $q->where('to', '>=', now())
+                            ->orWhereNull('to');
+                    });
+            })
+            ->orderBy('from_quantity', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+        $bestPrice = $basePrice;
+        foreach ($specificPrices as $specificPrice) {
+            $calculatedPrice = $basePrice;
+
+            if ($specificPrice->price && $specificPrice->price > 0) {
+                $calculatedPrice = (float) $specificPrice->price;
+            } elseif ($specificPrice->reduction && $specificPrice->reduction > 0) {
+                if ($specificPrice->reduction_type === 'percentage') {
+                    $calculatedPrice = $basePrice * (1 - ($specificPrice->reduction / 100));
+                } else {
+                    $calculatedPrice = $basePrice - $specificPrice->reduction;
+                }
+            }
+
+            if ($calculatedPrice < $bestPrice) {
+                $bestPrice = $calculatedPrice;
+            }
+        }
+
+        return max(0.0, $bestPrice);
+    }
+
+        /**
+     * Apply taxes to the provided price.
+     *
+     * @param  float  $price  The original price.
+     * @return float Price after applying taxes.
+     */
+    public static function applyTaxes(
+        float $price,
+        ?int $id_country = null,
+        ?int $id_state = null,
+        ?int $id_zip = null,
+    ): array
+    {
+        $tax = Tax::where('active', true)
+            ->when($id_country, function (Builder $query) use ($id_country) {
+                $query->where('id_country', $id_country);
+            })
+            ->when($id_state, function (Builder $query) use ($id_state) {
+                $query->where('id_state', $id_state);
+            })
+            ->when($id_zip, function (Builder $query) use ($id_zip) {
+                $query->where('id_zip', $id_zip);
+            })->first();
+        $price_with_taxes = $price;
+        $tax_name = null;
+        if ($tax) {
+            $taxRate = $tax->rate / 100;
+            $price_with_taxes = $price + ($price * $taxRate);
+            $tax_name = $tax->name;
+        }
+        return [
+            'price_without_taxes' => $price,
+            'price_with_taxes' => $price_with_taxes,
+            'tax' => $tax_name,
+        ];
+    }
+
+    // /**
+    //  * Retrieve the product's price based on season, stock, or default product pricing.
+    //  *
+    //  * @param  int  $product_id  The product ID to fetch the price for.
+    //  * @param  int|null  $stock_id  (Optional) Stock ID for stock-specific pricing.
+    //  * @param  int|null  $season_id  (Optional) Season ID for season-specific pricing.
+    //  * @param  bool  $with_taxes  (Optional) Whether the price should include taxes.
+    //  * @return float The calculated price, or 0 if no valid price is found.
+    //  */
+    // public static function getPrice(int $product_id, ?int $stock_id = null, ?int $season_id = null, bool $with_taxes = false): float
+    // {
+    //     // Fetch the product
+    //     $product = static::find($product_id);
+    //     if (!$product) {
+    //         return 0.0; // Return 0 if product is not found
+    //     }
+
+    //     // Check season-specific pricing if season_id is provided
+    //     if (!empty($season_id)) {
+    //         $seasonPrice = self::getSeasonPrice($product_id, $season_id);
+    //         if ($seasonPrice !== null) {
+    //             return $with_taxes ? self::applyTaxes($seasonPrice) : $seasonPrice;
+    //         }
+    //     }
+
+    //     // Check stock-specific pricing if stock_id is provided
+    //     if (!empty($stock_id)) {
+    //         $stockPrice = self::getStockPrice($stock_id);
+    //         if ($stockPrice !== null) {
+    //             return $with_taxes ? self::applyTaxes($stockPrice) : $stockPrice;
+    //         }
+    //     }
+
+    //     // Default to product price
+    //     $productPrice = $product->price > 0 ? (float) $product->price : 0.0;
+
+    //     return $with_taxes ? self::applyTaxes($productPrice) : $productPrice;
+    // }
 
     /**
      * Retrieve the season-specific price for a product.
@@ -586,18 +736,6 @@ class Product extends Model
             ->value('price');
     }
 
-    /**
-     * Apply taxes to the provided price.
-     *
-     * @param  float  $price  The original price.
-     * @return float Price after applying taxes.
-     */
-    private static function applyTaxes(float $price): float
-    {
-        $taxRate = config('tax.default_rate', config('tax.default_rate', 0)); // Example: Fetch tax rate from configuration
-
-        return $price * (1 + $taxRate);
-    }
 
     public static function getCurrentProductsCategories($query, $language_id): object
     {

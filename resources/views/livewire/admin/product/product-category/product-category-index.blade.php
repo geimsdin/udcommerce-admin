@@ -35,10 +35,10 @@
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
-                @forelse ($productCategories as $index => $productCategory)
+                @forelse ($productCategories as $productCategory)
                     <flux:table.row>
-                        <flux:table.cell>{{ $productCategory->languages[$index]->name }}</flux:table.cell>
-                        <flux:table.cell>{{ $productCategory->languages[$index]->description }}</flux:table.cell>
+                        <flux:table.cell>{{ $productCategory->name }}</flux:table.cell>
+                        <flux:table.cell>{{ $productCategory->currentLanguage?->description ?? '' }}</flux:table.cell>
                         <flux:table.cell>
                             <flux:badge color="{{ $productCategory->status ? 'green' : 'red' }}"
                                 icon="{{ $productCategory->status ? 'check-circle' : 'x-circle' }}">

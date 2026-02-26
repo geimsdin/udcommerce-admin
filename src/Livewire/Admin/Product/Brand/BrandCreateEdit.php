@@ -13,25 +13,15 @@ class BrandCreateEdit extends Component
     use WithFileUploads;
 
     public ?Brand $brand = null;
-
-    public string $name = '';
-
-    public string $company_name = '';
-
-    public string $description = '';
-
-    public string $address = '';
-
-    public string $city = '';
-
-    public string $state = '';
-
-    public string $country = '';
-
-    public string $tel = '';
-
-    public string $email = '';
-
+    public $name;
+    public $company_name;
+    public $description;
+    public $address;
+    public $city;
+    public $state;
+    public $country;
+    public $tel;
+    public $email;
     public $image = null;
 
     public ?string $existingImage = null;
