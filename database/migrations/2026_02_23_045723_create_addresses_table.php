@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->string('province')->nullable();
             $table->string('country');
             $table->string('phone');
-            $table->json('custom_fields')->nullable()
+            $table->json('custom_fields')->nullable();
             $table->boolean('default')->default(false);
             $table->timestamps();
 
