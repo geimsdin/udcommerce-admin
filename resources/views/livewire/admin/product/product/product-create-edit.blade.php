@@ -92,6 +92,11 @@
                                     wire:model="name"
                                     :required="true" 
                                 />
+                                <livewire:lmt-TextInput 
+                                    label="{{ __('ecommerce::products.form.link_rewrite') }}"
+                                    placeholder="{{ __('ecommerce::products.form.link_rewrite_placeholder') }}" 
+                                    wire:model="link_rewrite"
+                                />
                                 <livewire:lmt-RichEditor 
                                     wire:model="description_short" 
                                     :label="__('ecommerce::products.form.description_short')" 
@@ -863,11 +868,6 @@
                             </flux:subheading>
                         </div>
                         <div class="space-y-4">
-                            <livewire:lmt-TextInput 
-                                label="{{ __('ecommerce::products.form.link_rewrite') }}"
-                                placeholder="{{ __('ecommerce::products.form.link_rewrite_placeholder') }}" 
-                                wire:model="link_rewrite"
-                            />
                             <livewire:lmt-TextInput 
                                 label="{{ __('ecommerce::products.form.meta_title') }}"
                                 placeholder="{{ __('ecommerce::products.form.meta_title_placeholder') }}" 
