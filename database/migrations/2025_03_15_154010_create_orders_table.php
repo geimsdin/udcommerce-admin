@@ -36,11 +36,12 @@ return new class extends Migration {
             $table->float('return_amount')->default(0);
 
             $table->softDeletesDatetime();
-            $table->timestamps(); // created_at and updated_at TIMESTAMP NULL
+            $table->timestamps();
 
             // Indexes
             $table->index('client_id');
-            $table->index('address_id');
+            $table->index('shipping_address_id');
+            $table->index('billing_address_id');
             $table->index('currency_id');
             $table->index('guest_id');
         });
