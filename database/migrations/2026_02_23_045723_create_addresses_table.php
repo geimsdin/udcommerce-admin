@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('client_id');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('destination_name')->nullable();
             $table->string('company')->nullable();
             $table->string('vat_number')->nullable();
             $table->string('address1');
@@ -24,6 +25,7 @@ return new class extends Migration {
             $table->string('province')->nullable();
             $table->string('country');
             $table->string('phone');
+            $table->json('custom_fields')->nullable()
             $table->boolean('default')->default(false);
             $table->timestamps();
 

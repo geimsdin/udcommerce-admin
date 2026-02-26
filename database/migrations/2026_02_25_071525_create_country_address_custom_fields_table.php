@@ -13,10 +13,10 @@ return new class extends Migration {
         if (!Schema::hasTable('country_address_custom_fields')) {
             Schema::create('country_address_custom_fields', function (Blueprint $table) {
                 $table->id();
-                $table->string('country', 2)->index(); // ISO Code e.g., IT, US
-                $table->string('name')->index(); // internal key, e.g., 'codice_fiscale'
-                $table->string('label'); // UI label
-                $table->string('type')->default('text'); // text, number, alphanumeric
+                $table->string('country', 2)->index();
+                $table->string('name')->index();
+                $table->string('label');
+                $table->string('type')->default('text');
                 $table->boolean('is_required')->default(false);
                 $table->integer('min_length')->nullable();
                 $table->integer('max_length')->nullable();

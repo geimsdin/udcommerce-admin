@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,11 +15,12 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id')->nullable();
             $table->string('reference', 10);
             $table->unsignedInteger('carrier_id')->default(0);
-            $table->unsignedBigInteger('address_id')->default(0);
+            $table->unsignedBigInteger('shipping_address_id')->nullable();
+            $table->unsignedBigInteger('billing_address_id')->nullable();
             $table->unsignedInteger('currency_id');
             $table->unsignedInteger('season_id');
             $table->text('note')->nullable();
-            $table->text('guest_id')->nullable();
+            $table->string('guest_id')->nullable();
             $table->unsignedInteger('last_status_id')->default(0);
             $table->string('last_status_name', 50);
 
