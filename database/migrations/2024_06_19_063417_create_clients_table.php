@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,7 +15,7 @@ return new class extends Migration
             $table->string('reference_code', 100);
             $table->string('first_name', 100);
             $table->string('last_name', 100);
-            $table->string('company_name', 254);
+            $table->string('company_name', 254)->nullable();
             $table->string('vat_code', 25)->default('no vat code');
             $table->string('fiscal_code', 25)->default('no fiscal code');
             $table->string('pec', 254)->default('no pec code');
