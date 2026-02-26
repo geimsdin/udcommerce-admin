@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cart_details', function (Blueprint $table) {
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger( 'variation_id');
+            $table->unsignedBigInteger( 'variation_id')->nullable();
             $table->unsignedInteger( 'language_id');
             $table->string( 'product_name');
             $table->integer('quantity')->default(0);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Set composite primary key
-            $table->primary(['cart_id', 'product_id', 'variation_id']);
+            $table->primary(['cart_id', 'product_id']);
         });
     }
 

@@ -189,7 +189,8 @@ class Cart extends Model
                             $price = $variation->price;
                         }
                     }
-                    $product_data[$key]['product_price'] = $price;
+                    $price = Product::getPrice($detail->product_id, $detail->variation_id, $price, 1, true, Currency::getCurrentCurrency()->id, $cart->client_id, $cart->guest_id);
+                    $product_data[$key]['product_price'] = $price['price_with_taxes'];
                 }
 
                 // total price handling
@@ -201,16 +202,16 @@ class Cart extends Model
                 // image handling
                 if (!isset($product_data[$key]['product_image'])) {
                     if (isset($variations[$detail->variation_id]->image)) {
-                        if ($variations[$detail->variation_id]->image->image) {
+                        if (isset($variations[$detail->variation_id]->image->image) && $variations[$detail->variation_id]->image->image) {
                             $product_data[$key]['product_image'] = $variations[$detail->variation_id]->image->image;
                         } else {
-                            $product_data[$key]['product_image'] = $variations[$detail->variation_id]->image;
+                            $product_data[$key]['product_image'] = isset($variations[$detail->variation_id]->image) ? $variations[$detail->variation_id]->image : null;
                         }
                     } else {
-                        if ($products[$detail->product_id]->defaultImage->image) {
+                        if (isset($products[$detail->product_id]->defaultImage->image) && $products[$detail->product_id]->defaultImage->image) {
                             $product_data[$key]['product_image'] = $products[$detail->product_id]->defaultImage->image;
                         } else {
-                            $product_data[$key]['product_image'] = $products[$detail->product_id]->defaultImage;
+                            $product_data[$key]['product_image'] = isset($products[$detail->product_id]->defaultImage) ? $products[$detail->product_id]->defaultImage : null;
                         }
                     }
                 }
@@ -376,7 +377,8 @@ class Cart extends Model
                 END) as total_amount_no_taxes
             ')
             ->first();
-        $taxes = $result->total_amount_no_taxes * (config('b2b.tax') / 100);
+        $tax = Product::applyTaxes($result->total_amount_no_taxes);
+        $taxes = $tax['price_with_taxes'] - $tax['price_without_taxes'];
 
         // Shipping cost from session (set in Step 3)
         $shipping = session('checkout.shipping_method.price', 0);
@@ -385,11 +387,11 @@ class Cart extends Model
         $paymentFee = session('checkout.payment_method.fee', 0);
 
         $result->total_amount_no_taxes = round($result->total_amount_no_taxes, 2);
-        $result->total_taxes = round($taxes, 2);
+        $result->total_taxes = $taxes;
         $result->shipping_cost = round($shipping, 2);
         $result->payment_fee = round($paymentFee, 2);
         $result->grand_total = round($shipping + $paymentFee + $taxes + $result->total_amount_no_taxes, 2);
-
+        $result->tax = $tax['tax'];
         return $result;
 
         return $result;

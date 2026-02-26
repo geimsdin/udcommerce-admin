@@ -38,7 +38,7 @@ class ProductCategoryIndex extends Component
     public function render()
     {
         $productCategories = ProductCategory::query()
-            ->with(['languages'])
+            ->with(['currentLanguage', 'languages'])
             ->when($this->search, fn($q) => $q->whereHas('languages', function ($q) {
                 $q->where('name', 'like', "%{$this->search}%");
             }))
