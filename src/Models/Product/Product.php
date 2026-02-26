@@ -109,7 +109,7 @@ class Product extends Model
     {
         return $this->languages()
             ->where('language_id', $languageId)
-            ->value('name');
+            ->value('name') ?? '';
     }
 
     /**
@@ -521,7 +521,7 @@ class Product extends Model
         return $features;
     }
 
-        /**
+    /**
      * Calculate the price for this product including specific price rules.
      * Returns the base price with the best applicable specific price applied (in base currency).
      *
@@ -565,8 +565,7 @@ class Product extends Model
         ?int $currencyId = null,
         ?array $clientGroupIds = null,
         ?int $customerId = null
-    )
-    {
+    ) {
         $specificPrices = SpecificPrice::where('id_product', $productId)
             ->where(function ($query) use ($currencyId) {
                 $query->where('id_currency', $currencyId)
@@ -628,7 +627,7 @@ class Product extends Model
         return max(0.0, $bestPrice);
     }
 
-        /**
+    /**
      * Apply taxes to the provided price.
      *
      * @param  float  $price  The original price.
@@ -639,8 +638,7 @@ class Product extends Model
         ?int $id_country = null,
         ?int $id_state = null,
         ?int $id_zip = null,
-    ): array
-    {
+    ): array {
         $tax = Tax::where('active', true)
             ->when($id_country, function (Builder $query) use ($id_country) {
                 $query->where('id_country', $id_country);

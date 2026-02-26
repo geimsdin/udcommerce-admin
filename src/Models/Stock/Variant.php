@@ -67,16 +67,16 @@ class Variant extends Model
     {
         return $this->languages()
             ->where('language_id', $languageId)
-            ->value('name');
+            ->value('name') ?? '';
     }
 
     public function getNameAttribute()
     {
-        return $this->currentLanguage->name;
+        return $this->currentLanguage?->name ?? '';
     }
 
     public function getVariantGroupNameAttribute()
     {
-        return $this->variantGroup->getNameAttribute();
+        return $this->variantGroup?->getNameAttribute() ?? '';
     }
 }

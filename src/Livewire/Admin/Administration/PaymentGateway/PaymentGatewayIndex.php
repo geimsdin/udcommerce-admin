@@ -36,9 +36,21 @@ class PaymentGatewayIndex extends Component
 
     public function save(): void
     {
-        $this->validate([
-            'editingConfig.*' => 'nullable|string',
-        ]);
+        $rules = [];
+        foreach ($this->editingConfig as $key => $value) {
+            if (is_bool($value) || $key === 'testMode') {
+                $rules["editingConfig.{$key}"] = 'nullable|boolean';
+            } else {
+                $rules["editingConfig.{$key}"] = 'nullable|string';
+            }
+        }
+
+        $this->validate($rules);
+
+        // Ensure testMode is stored as a boolean
+        if (array_key_exists('testMode', $this->editingConfig)) {
+            $this->editingConfig['testMode'] = (bool) $this->editingConfig['testMode'];
+        }
 
         $gateway = PaymentGateway::findOrFail($this->editingId);
         $gateway->update(['config' => $this->editingConfig]);
