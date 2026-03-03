@@ -4,11 +4,14 @@ namespace Unusualdope\LaravelEcommerce\Livewire\Admin\Product\ProductCategory;
 
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Unusualdope\LaravelEcommerce\Models\Product\ProductCategory;
 use Unusualdope\LaravelEcommerce\Models\Product\ProductCategoryLanguage;
 
 class ProductCategoryCreateEdit extends Component
 {
+    use WithFileUploads;
+
     public ?ProductCategory $productCategory = null;
 
     public bool $isEditing = false;
@@ -27,6 +30,14 @@ class ProductCategoryCreateEdit extends Component
 
     public bool $status = true;
 
+    public $image = null;
+
+    /** @var string|null URL of the Spatie media original */
+    public ?string $existingMediaUrl = null;
+
+    /** @var array<string, string> Available conversion URLs [name => url] */
+    public array $existingConversions = [];
+
     public function mount(?ProductCategory $productCategory = null): void
     {
         $languageModel = config('lmt.language_model');
@@ -38,6 +49,17 @@ class ProductCategoryCreateEdit extends Component
             $this->sort_order = $productCategory->sort_order;
             $this->status = $productCategory->status;
             $this->loadTranslatableData();
+
+            // Load Spatie media URLs if available
+            $media = $productCategory->getFirstMedia('category_image');
+            if ($media) {
+                $this->existingMediaUrl = $media->getUrl();
+                foreach ($media->generated_conversions as $conversionName => $generated) {
+                    if ($generated) {
+                        $this->existingConversions[$conversionName] = $media->getUrl($conversionName);
+                    }
+                }
+            }
         } else {
             $this->productCategory = new ProductCategory;
             $this->initializeTranslatableData();
@@ -74,8 +96,23 @@ class ProductCategoryCreateEdit extends Component
         }
     }
 
+    public function deleteImage(): void
+    {
+        if ($this->productCategory?->exists) {
+            $this->productCategory->clearMediaCollection('category_image');
+            $this->existingMediaUrl = null;
+            $this->existingConversions = [];
+        }
+        $this->image = null;
+    }
+
     public function save(): void
     {
+        $rules = [
+            'image' => ['nullable', 'image', 'max:2048'],
+        ];
+        $this->validate($rules);
+
         $languages = $this->languageModel::getLanguagesForMultilangForm();
         if (!$this->productCategory->exists) {
             $this->productCategory = ProductCategory::create([
@@ -90,6 +127,16 @@ class ProductCategoryCreateEdit extends Component
                 'status' => $this->status,
             ]);
         }
+
+        // Handle image upload via Spatie Media Library
+        if ($this->image) {
+            $this->productCategory->clearMediaCollection('category_image');
+            $this->productCategory
+                ->addMedia($this->image->getRealPath())
+                ->preservingOriginal()
+                ->toMediaCollection('category_image');
+        }
+
         foreach ($languages as $language) {
             ProductCategoryLanguage::updateOrCreate(
                 [

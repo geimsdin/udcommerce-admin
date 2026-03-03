@@ -31,6 +31,7 @@ return [
         'image' => 'Image',
         'upload_image' => 'Upload Image',
         'upload_image_text' => 'Drop image or click to browse (max 2MB)',
+        'thumbnail_preview' => 'Thumbnail',
     ],
     'messages' => [
         'create_subtitle' => 'Add a new product image',

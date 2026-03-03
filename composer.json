@@ -19,7 +19,8 @@
     "omnipay/paypal": "^3.0",
     "omnipay/stripe": "^3.2",
     "typesense/typesense-php": "^4.9",
-    "unusualdope/banner-manager": "@dev"
+    "unusualdope/banner-manager": "@dev",
+    "spatie/laravel-medialibrary": "^11.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"

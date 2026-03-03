@@ -11,6 +11,8 @@ use Unusualdope\LaravelEcommerce\Livewire\Admin\Administration\PaymentGateway\Pa
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Administration\CountryAddressCustomField\CountryAddressCustomFieldIndex;
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Administration\CountryAddressCustomField\CountryAddressCustomFieldCreateEdit;
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Config;
+use Unusualdope\LaravelEcommerce\Livewire\Admin\ImageSetting\ImageSettingIndex;
+use Unusualdope\LaravelEcommerce\Livewire\Admin\ImageSetting\ImageSettingCreateEdit;
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Coupon\CouponCreateEdit;
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Coupon\CouponIndex;
 use Unusualdope\LaravelEcommerce\Livewire\Admin\Customer\Client\ClientCreateEdit;
@@ -166,6 +168,11 @@ Route::prefix($prefix)
 
         // Config
         Route::livewire('configs', Config::class)->name('configs');
+
+        // Image Settings
+        Route::livewire('image-settings', ImageSettingIndex::class)->name('image-settings.index');
+        Route::livewire('image-settings/create', ImageSettingCreateEdit::class)->name('image-settings.create');
+        Route::livewire('image-settings/{imageSetting}/edit', ImageSettingCreateEdit::class)->name('image-settings.edit');
 
         // Country Address Custom Fields
         Route::livewire('country-address-custom-fields', CountryAddressCustomFieldIndex::class)->name('configs.country_address_custom_fields.index');

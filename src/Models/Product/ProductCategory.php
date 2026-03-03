@@ -11,12 +11,25 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
+use Spatie\MediaLibrary\HasMedia;
 use Unusualdope\LaravelEcommerce\Models\Size\SizeChart;
+use Unusualdope\LaravelEcommerce\Traits\HasMediaThumbnails;
 use Unusualdope\LaravelModelTranslatable\Traits\HasTranslation;
 
-class ProductCategory extends Model
+class ProductCategory extends Model implements HasMedia
 {
-    use Cachable, HasTranslation, Searchable;
+    use Cachable, HasMediaThumbnails, HasTranslation, Searchable;
+
+    public function getMediaEntityType(): string
+    {
+        return 'category';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('category_image')
+            ->singleFile();
+    }
 
     public static $current_cache_key = 'NAVIGATION_CATEGORY_LIST';
 

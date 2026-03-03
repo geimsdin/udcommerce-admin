@@ -14,15 +14,27 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
+use Spatie\MediaLibrary\HasMedia;
 use Unusualdope\LaravelEcommerce\Models\Administration\Currency;
 use Unusualdope\LaravelEcommerce\Models\Stock\Stock;
 use Unusualdope\LaravelEcommerce\Models\Stock\Variation;
 use Unusualdope\LaravelEcommerce\Models\Tax\Tax;
+use Unusualdope\LaravelEcommerce\Traits\HasMediaThumbnails;
 use Unusualdope\LaravelModelTranslatable\Traits\HasTranslation;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
-    use Cachable, HasTranslation, Searchable;
+    use Cachable, HasMediaThumbnails, HasTranslation, Searchable;
+
+    public function getMediaEntityType(): string
+    {
+        return 'product';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('product_images');
+    }
 
     public function setTranslatableFields(): array
     {
