@@ -26,6 +26,12 @@ class BrandCreateEdit extends Component
 
     public ?string $existingImage = null;
 
+    /** @var string|null URL of the Spatie media original */
+    public ?string $existingMediaUrl = null;
+
+    /** @var array<string, string> Available conversion URLs [name => url] */
+    public array $existingConversions = [];
+
     public function mount(?Brand $brand = null): void
     {
         $this->brand = $brand;
@@ -40,15 +46,35 @@ class BrandCreateEdit extends Component
             $this->tel = $brand->tel;
             $this->email = $brand->email;
             $this->existingImage = $brand->image;
+
+            // Load Spatie media URLs if available
+            $media = $brand->getFirstMedia('brand_image');
+            if ($media) {
+                $this->existingMediaUrl = $media->getUrl();
+                foreach ($media->generated_conversions as $conversionName => $generated) {
+                    if ($generated) {
+                        $this->existingConversions[$conversionName] = $media->getUrl($conversionName);
+                    }
+                }
+            }
         }
     }
 
     public function deleteImage(): void
     {
-        if ($this->existingImage && $this->brand?->exists) {
-            Storage::disk('public')->delete($this->existingImage);
-            $this->brand->update(['image' => null]);
-            $this->existingImage = null;
+        if ($this->brand?->exists) {
+            // Clear Spatie media
+            $this->brand->clearMediaCollection('brand_image');
+            $this->existingMediaUrl = null;
+            $this->existingConversions = [];
+
+            // Also clear legacy image if exists
+            if ($this->existingImage) {
+                Storage::disk('public')->delete($this->existingImage);
+                $this->brand->update(['image' => null]);
+                $this->existingImage = null;
+            }
+
             Flux::toast(__('ecommerce::brands.brand_logo_deleted'));
         }
 
@@ -83,7 +109,7 @@ class BrandCreateEdit extends Component
             'email' => $this->email,
         ];
 
-        // Handle new image upload
+        // Handle new image upload (legacy path for backward compatibility)
         if ($this->image) {
             // Delete old image if exists
             if ($this->existingImage) {
@@ -100,7 +126,16 @@ class BrandCreateEdit extends Component
             session()->flash('status', __('ecommerce::brands.brand_created'));
         }
 
-        $this->redirect(route(config('ud-ecommerce.admin_route_prefix', 'admin').'.brands.index'), navigate: true);
+        // Add image to Spatie Media Library for thumbnail generation
+        if ($this->image) {
+            $this->brand->clearMediaCollection('brand_image');
+            $this->brand
+                ->addMedia($this->image->getRealPath())
+                ->preservingOriginal()
+                ->toMediaCollection('brand_image');
+        }
+
+        $this->redirect(route(config('ud-ecommerce.admin_route_prefix', 'admin') . '.brands.index'), navigate: true);
     }
 
     public function render()

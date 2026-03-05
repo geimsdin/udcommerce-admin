@@ -14,12 +14,25 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\GdDriver;
 use Intervention\Image\ImageManager;
+use Spatie\MediaLibrary\HasMedia;
 use Unusualdope\LaravelEcommerce\Models\Stock\Variant;
+use Unusualdope\LaravelEcommerce\Traits\HasMediaThumbnails;
 use Unusualdope\LaravelModelTranslatable\Traits\HasTranslation;
 
-class ProductImage extends Model
+class ProductImage extends Model implements HasMedia
 {
-    use Cachable, HasTranslation;
+    use Cachable, HasMediaThumbnails, HasTranslation;
+
+    public function getMediaEntityType(): string
+    {
+        return 'product';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('product_image')
+            ->singleFile();
+    }
 
     public bool $not_filament = false;
 
@@ -320,6 +333,20 @@ class ProductImage extends Model
                         'language_id' => 1,
                         'caption' => $product_name . ' - Image ' . $position + 1,
                     ]);
+
+                    // Register with Spatie Media Library for thumbnail generation
+                    $storedFilePath = storage_path('app/' . $storagePath . '/' . $image_name);
+                    if (file_exists($storedFilePath)) {
+                        try {
+                            $productImage->clearMediaCollection('product_image');
+                            $productImage
+                                ->addMedia($storedFilePath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('product_image');
+                        } catch (\Exception $e) {
+                            Log::warning("Failed to register image with Spatie Media Library: {$storedFilePath} - " . $e->getMessage());
+                        }
+                    }
 
                     // Clean up the temporary file after it has been moved to storage
                     if (file_exists($tempPath)) {

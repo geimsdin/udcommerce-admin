@@ -24,6 +24,12 @@ class ProductImageCreateEdit extends Component
 
     public ?string $existingImage = null;
 
+    /** @var string|null URL of the Spatie media original */
+    public ?string $existingMediaUrl = null;
+
+    /** @var array<string, string> Available conversion URLs [name => url] */
+    public array $existingConversions = [];
+
     public int $position = 0;
 
     /** @var array<int, string> Caption per language_id */
@@ -45,6 +51,18 @@ class ProductImageCreateEdit extends Component
             $this->existingImage = $productImage->image;
             $this->position = (int) $productImage->position;
             $this->loadTranslatableData();
+
+            // Load Spatie media URLs if available
+            $media = $productImage->getFirstMedia('product_image');
+            if ($media) {
+                $this->existingMediaUrl = $media->getUrl();
+                // Load all generated conversions
+                foreach ($media->generated_conversions as $conversionName => $generated) {
+                    if ($generated) {
+                        $this->existingConversions[$conversionName] = $media->getUrl($conversionName);
+                    }
+                }
+            }
         } else {
             $this->initializeTranslatableData();
         }
@@ -72,11 +90,19 @@ class ProductImageCreateEdit extends Component
 
     public function deleteImage(): void
     {
-        if ($this->existingImage && $this->productImage?->exists) {
-            Storage::disk('public')->delete($this->existingImage);
-            $this->productImage->not_filament = true;
-            $this->productImage->update(['image' => null]);
-            $this->existingImage = null;
+        if ($this->productImage?->exists) {
+            // Delete Spatie media
+            $this->productImage->clearMediaCollection('product_image');
+            $this->existingMediaUrl = null;
+            $this->existingConversions = [];
+
+            // Also delete legacy image if exists
+            if ($this->existingImage) {
+                Storage::disk('public')->delete($this->existingImage);
+                $this->productImage->not_filament = true;
+                $this->productImage->update(['image' => null]);
+                $this->existingImage = null;
+            }
         }
         $this->image = null;
     }
@@ -90,7 +116,7 @@ class ProductImageCreateEdit extends Component
             'caption' => ['nullable', 'array'],
             'caption.*' => ['nullable', 'string', 'max:255'],
         ];
-        if (! $this->productImage?->exists) {
+        if (!$this->productImage?->exists) {
             $rules['image'] = ['required', 'image', 'max:2048'];
         } else {
             $rules['image'] = ['nullable', 'image', 'max:2048'];
@@ -101,10 +127,11 @@ class ProductImageCreateEdit extends Component
         $imagePath = $this->existingImage;
 
         if ($this->image) {
+            // Store legacy path for backward compatibility
             if ($this->existingImage) {
                 Storage::disk('public')->delete($this->existingImage);
             }
-            $imagePath = $this->image->store('product-images/'.$this->product_id, 'public');
+            $imagePath = $this->image->store('product-images/' . $this->product_id, 'public');
         }
 
         if ($this->productImage?->exists) {
@@ -128,6 +155,15 @@ class ProductImageCreateEdit extends Component
             session()->flash('status', __('ecommerce::product_images.image_created'));
         }
 
+        // Add image to Spatie Media Library for thumbnail generation
+        if ($this->image) {
+            $productImage->clearMediaCollection('product_image');
+            $productImage
+                ->addMedia($this->image->getRealPath())
+                ->preservingOriginal()
+                ->toMediaCollection('product_image');
+        }
+
         foreach ($languages as $language) {
             ProductImageLanguage::updateOrCreate(
                 [
@@ -138,12 +174,12 @@ class ProductImageCreateEdit extends Component
             );
         }
 
-        $this->redirect(route(config('ud-ecommerce.admin_route_prefix', 'admin').'.productimages.index'), navigate: true);
+        $this->redirect(route(config('ud-ecommerce.admin_route_prefix', 'admin') . '.productimages.index'), navigate: true);
     }
 
     public function getVariationsProperty()
     {
-        if (! $this->product_id) {
+        if (!$this->product_id) {
             return collect();
         }
 

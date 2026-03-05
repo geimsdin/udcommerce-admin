@@ -8,11 +8,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
+use Spatie\MediaLibrary\HasMedia;
 use Unusualdope\LaravelEcommerce\Models\Size\SizeChart;
+use Unusualdope\LaravelEcommerce\Traits\HasMediaThumbnails;
 
-class Brand extends Model
+class Brand extends Model implements HasMedia
 {
-    use Cachable, Searchable;
+    use Cachable, HasMediaThumbnails, Searchable;
+
+    public function getMediaEntityType(): string
+    {
+        return 'brand';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('brand_image')
+            ->singleFile();
+    }
 
     public array $cache_keys = [
         'full_brands_list',

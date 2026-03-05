@@ -46,6 +46,7 @@ return [
         'image_placeholder' => 'Choose a image file',
         'image_preview' => 'Image Preview',
         'company_information' => 'Company Information',
+        'thumbnail_preview' => 'Thumbnail',
     ],
     'messages' => [
         'create_subtitle' => 'Create a new brand',
