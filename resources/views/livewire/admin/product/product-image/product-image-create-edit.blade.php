@@ -3,10 +3,10 @@
     <div class="flex items-center justify-between mb-4">
         <div>
             <flux:heading size="xl">
-                {{ $isEditing ? __('product_images.edit_image') : __('product_images.create_image') }}
+                {{ $isEditing ? __('ecommerce::product_images.edit_image') : __('ecommerce::product_images.create_image') }}
             </flux:heading>
             <flux:subheading>
-                {{ $isEditing ? __('product_images.messages.edit_subtitle') : __('product_images.messages.create_subtitle') }}
+                {{ $isEditing ? __('ecommerce::product_images.messages.edit_subtitle') : __('ecommerce::product_images.messages.create_subtitle') }}
             </flux:subheading>
         </div>
     </div>
@@ -14,8 +14,8 @@
     {{-- Card --}}
     <flux:card>
         <form wire:submit="save" class="space-y-6">
-            <flux:select variant="listbox" searchable :label="__('product_images.form.product')"
-                placeholder="{{ __('product_images.form.product_placeholder') }}" wire:model.live="product_id"
+            <flux:select variant="listbox" searchable :label="__('ecommerce::product_images.form.product')"
+                placeholder="{{ __('ecommerce::product_images.form.product_placeholder') }}" wire:model.live="product_id"
                 :required="true">
                 @foreach ($products as $product)
                     <flux:select.option :value="$product->id">{{ $product->name ?? 'Product #' . $product->id }}
@@ -23,30 +23,30 @@
                 @endforeach
             </flux:select>
 
-            <flux:select variant="listbox" :label="__('product_images.form.variation')"
-                placeholder="{{ __('product_images.form.variation_placeholder') }}" wire:model="variation_id" clearable>
+            <flux:select variant="listbox" :label="__('ecommerce::product_images.form.variation')"
+                placeholder="{{ __('ecommerce::product_images.form.variation_placeholder') }}" wire:model="variation_id" clearable>
                 @foreach ($variations as $variation)
                     <flux:select.option :value="$variation->id">
-                        {{ __('product_images.form.variation_option', ['id' => $variation->id]) }}
+                        {{ __('ecommerce::product_images.form.variation_option', ['id' => $variation->id]) }}
                     </flux:select.option>
                 @endforeach
             </flux:select>
 
-            <flux:input wire:model="position" type="number" min="0" :label="__('product_images.form.position')"
-                placeholder="{{ __('product_images.form.position_placeholder') }}" />
+            <flux:input wire:model="position" type="number" min="0" :label="__('ecommerce::product_images.form.position')"
+                placeholder="{{ __('ecommerce::product_images.form.position_placeholder') }}" />
 
             {{-- Caption per language (like variant create edit) --}}
             <flux:card>
                 <div class="mb-5">
                     <livewire:lmt-LangSelector wire:model.live="selected_language" />
                 </div>
-                <flux:input wire:model="caption.{{ $selected_language }}" :label="__('product_images.form.caption')"
-                    placeholder="{{ __('product_images.form.caption_placeholder') }}" />
+                <flux:input wire:model="caption.{{ $selected_language }}" :label="__('ecommerce::product_images.form.caption')"
+                    placeholder="{{ __('ecommerce::product_images.form.caption_placeholder') }}" />
             </flux:card>
 
             <div>
                 <div class="mb-2">
-                    <flux:label>{{ __('product_images.form.image') }}</flux:label>
+                    <flux:label>{{ __('ecommerce::product_images.form.image') }}</flux:label>
                     @if (!$isEditing)
                         <span class="text-red-500 text-sm">*</span>
                     @endif
@@ -80,7 +80,7 @@
                         @if (!empty($existingConversions) && !$image)
                             <div class="mt-3">
                                 <span
-                                    class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2 block">{{ __('product_images.form.thumbnail_preview') }}:</span>
+                                    class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2 block">{{ __('ecommerce::product_images.form.thumbnail_preview') }}:</span>
                                 <div class="flex flex-wrap gap-3">
                                     @foreach ($existingConversions as $conversionName => $conversionUrl)
                                         <div class="text-center">
@@ -103,10 +103,10 @@
                                 <flux:icon name="photo" class="size-8 text-zinc-500 dark:text-zinc-400" />
                             </div>
                             <flux:heading size="lg" class="mb-1">
-                                {{ __('product_images.form.upload_image') }}
+                                {{ __('ecommerce::product_images.form.upload_image') }}
                             </flux:heading>
                             <flux:subheading class="text-center">
-                                {{ __('product_images.form.upload_image_text') }}
+                                {{ __('ecommerce::product_images.form.upload_image_text') }}
                             </flux:subheading>
                         </div>
                     </flux:file-upload>
@@ -127,7 +127,7 @@
                     {{ __('common.cancel') }}
                 </flux:button>
                 <flux:button variant="primary" type="submit">
-                    {{ $isEditing ? __('product_images.update_image') : __('product_images.create_image') }}
+                    {{ $isEditing ? __('ecommerce::product_images.update_image') : __('ecommerce::product_images.create_image') }}
                 </flux:button>
             </div>
         </form>

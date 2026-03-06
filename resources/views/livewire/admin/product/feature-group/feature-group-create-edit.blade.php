@@ -2,10 +2,10 @@
     {{-- Header --}}
     <div>
         <flux:heading size="xl">
-            {{ $isEditing ? __('feature-groups.edit_feature_group') : __('feature-groups.add_feature_group') }}
+            {{ $isEditing ? __('ecommerce::feature-groups.edit_feature_group') : __('ecommerce::feature-groups.add_feature_group') }}
         </flux:heading>
         <flux:subheading>
-            {{ $isEditing ? __('feature-groups.messages.edit_subtitle') : __('feature-groups.messages.create_subtitle') }}
+            {{ $isEditing ? __('ecommerce::feature-groups.messages.edit_subtitle') : __('ecommerce::feature-groups.messages.create_subtitle') }}
         </flux:subheading>
     </div>
 
@@ -18,14 +18,14 @@
                     <livewire:lmt-LangSelector wire:model.live="selected_language"/>
                 </div>
                 <livewire:lmt-TextInput
-                label="{{ __('feature-groups.form.name') }}"
-                placeholder="{{ __('feature-groups.form.name_placeholder') }}"
+                label="{{ __('ecommerce::feature-groups.form.name') }}"
+                placeholder="{{ __('ecommerce::feature-groups.form.name_placeholder') }}"
                 wire:model="name"
                 :required="true"
                 />
                 <livewire:lmt-Textarea
-                    label="{{ __('feature-groups.form.tooltip') }}"
-                    placeholder="{{ __('feature-groups.form.tooltip_placeholder') }}"
+                    label="{{ __('ecommerce::feature-groups.form.tooltip') }}"
+                    placeholder="{{ __('ecommerce::feature-groups.form.tooltip_placeholder') }}"
                     wire:model="tooltip"
                     :required="true"
                 />
@@ -36,7 +36,7 @@
             {{-- Buttons --}}
             <div class="flex items-center gap-4">
                 <flux:button variant="primary" type="submit">
-                    {{ $isEditing ? __('feature-groups.update_feature_group') : __('feature-groups.create_feature_group') }}
+                    {{ $isEditing ? __('ecommerce::feature-groups.update_feature_group') : __('ecommerce::feature-groups.create_feature_group') }}
                 </flux:button>
                 <flux:button variant="ghost" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.feature-groups.index')" wire:navigate>
                     {{ __('common.cancel') }}

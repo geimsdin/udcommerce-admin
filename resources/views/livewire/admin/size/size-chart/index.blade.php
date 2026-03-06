@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('size-charts.title') }}</flux:heading>
-            <flux:subheading>{{ __('size-charts.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::size-charts.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::size-charts.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.size-charts.create')" wire:navigate>
-            {{ __('size-charts.add_size_chart') }}
+            {{ __('ecommerce::size-charts.add_size_chart') }}
         </flux:button>
     </div>
 
@@ -24,7 +24,7 @@
          x-transition
          x-cloak>
         <flux:callout variant="success" icon="check-circle">
-            {{ __('size-charts.size_chart_deleted') }}
+            {{ __('ecommerce::size-charts.size_chart_deleted') }}
         </flux:callout>
     </div>
 
@@ -34,7 +34,7 @@
         <div class="max-w-sm">
             <flux:input
                 wire:model.live.debounce.300ms="search"
-                placeholder="{{ __('size-charts.search_placeholder') }}"
+                placeholder="{{ __('ecommerce::size-charts.search_placeholder') }}"
                 icon="magnifying-glass"
             />
         </div>
@@ -42,11 +42,11 @@
         {{-- Table --}}
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>{{ __('size-charts.table.id') }}</flux:table.column>
-                <flux:table.column>{{ __('size-charts.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('size-charts.table.brand') }}</flux:table.column>
-                <flux:table.column>{{ __('size-charts.table.category') }}</flux:table.column>
-                <flux:table.column class="w-32">{{ __('size-charts.table.actions') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::size-charts.table.id') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::size-charts.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::size-charts.table.brand') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::size-charts.table.category') }}</flux:table.column>
+                <flux:table.column class="w-32">{{ __('ecommerce::size-charts.table.actions') }}</flux:table.column>
             </flux:table.columns>
 
             <flux:table.rows>
@@ -70,7 +70,7 @@
                                     variant="ghost"
                                     icon="trash"
                                     wire:click="delete({{ $size_chart->id }})"
-                                    wire:confirm="{{ __('size-charts.delete_confirm') }}"
+                                    wire:confirm="{{ __('ecommerce::size-charts.delete_confirm') }}"
                                     class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                                 />
                             </div>
@@ -81,7 +81,7 @@
                         <flux:table.cell colspan="4" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
                                 <flux:icon.users class="size-12 text-zinc-300 dark:text-zinc-600" />
-                                <flux:text class="text-zinc-500">{{ __('size-charts.no_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::size-charts.no_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>

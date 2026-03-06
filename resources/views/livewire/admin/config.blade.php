@@ -1,10 +1,10 @@
 <div class="space-y-6">
     <div>
         <flux:heading size="xl">
-            {{ __('config.title') }}
+            {{ __('ecommerce::config.title') }}
         </flux:heading>
         <flux:subheading>
-            {{ __('config.subtitle') }}
+            {{ __('ecommerce::config.subtitle') }}
         </flux:subheading>
     </div>
     @if (session('status'))
@@ -20,8 +20,8 @@
         <form wire:submit="save">
             <div class="grid grid-cols-4 gap-4">
                 <flux:switch wire:model="is_returned_product_affect_stock"
-                    :label="__('config.form.is_returned_product_affect_stock')"
-                    :description="__('config.form.is_returned_product_affect_stock_tooltip')" />
+                    :label="__('ecommerce::config.form.is_returned_product_affect_stock')"
+                    :description="__('ecommerce::config.form.is_returned_product_affect_stock_tooltip')" />
             </div>
             <div class="flex items-center gap-4 justify-end mt-6">
                 <flux:button type="button" wire:click="resetConfig">

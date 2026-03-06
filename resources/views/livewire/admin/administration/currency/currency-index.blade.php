@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('currencies.title') }}</flux:heading>
-            <flux:subheading>{{ __('currencies.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::currencies.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::currencies.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.currencies.create')" wire:navigate>
-            {{ __('currencies.add_currency') }}
+            {{ __('ecommerce::currencies.add_currency') }}
         </flux:button>
     </div>
 
@@ -25,11 +25,11 @@
     <flux:card class="space-y-4">
         <flux:table :paginate="$currencies">
             <flux:table.columns>
-                <flux:table.column>{{ __('currencies.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('currencies.table.code') }}</flux:table.column>
-                <flux:table.column>{{ __('currencies.table.symbol') }}</flux:table.column>
-                <flux:table.column>{{ __('currencies.table.exchange_rate') }}</flux:table.column>
-                <flux:table.column>{{ __('currencies.table.default') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::currencies.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::currencies.table.code') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::currencies.table.symbol') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::currencies.table.exchange_rate') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::currencies.table.default') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -37,7 +37,7 @@
                     <flux:table.row>
                         <flux:table.cell>{{ $currency->name }}</flux:table.cell>
                         <flux:table.cell>{{ $currency->iso_code }}</flux:table.cell>
-                        <flux:table.cell>{{ config('currencies.' . $currency->iso_code) }}</flux:table.cell>
+                        <flux:table.cell>{{ config('ecommerce::currencies.' . $currency->iso_code) }}</flux:table.cell>
                         <flux:table.cell>{{ $currency->exchange_rate }}</flux:table.cell>
                         <flux:table.cell>
                             <flux:badge color="{{ $currency->default ? 'green' : 'red' }}" icon="{{ $currency->default ? 'check-circle' : 'x-circle' }}">
@@ -59,7 +59,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="6" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('currencies.no_currencies_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::currencies.no_currencies_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -74,11 +74,11 @@
             </div>
             
             <flux:heading size="lg" class="mb-2">
-                {{ __('currencies.delete_confirmation_title') }}
+                {{ __('ecommerce::currencies.delete_confirmation_title') }}
             </flux:heading>
             
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('currencies.delete_confirmation_text') }}
+                {{ __('ecommerce::currencies.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

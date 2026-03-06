@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('feature-groups.title') }}</flux:heading>
-            <flux:subheading>{{ __('feature-groups.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::feature-groups.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::feature-groups.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.feature-groups.create')" wire:navigate>
-            {{ __('feature-groups.add_feature_group') }}
+            {{ __('ecommerce::feature-groups.add_feature_group') }}
         </flux:button>
     </div>
     @if (session('status'))
@@ -29,8 +29,8 @@
         </div>
         <flux:table :paginate="$featureGroups">
             <flux:table.columns>
-                <flux:table.column>{{ __('feature-groups.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('feature-groups.table.position') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::feature-groups.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::feature-groups.table.position') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -53,7 +53,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="9" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('feature-groups.no_feature_groups_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::feature-groups.no_feature_groups_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -68,11 +68,11 @@
             </div>
             
             <flux:heading size="lg" class="mb-2">
-                {{ __('feature-groups.delete_confirmation_title') }}
+                {{ __('ecommerce::feature-groups.delete_confirmation_title') }}
             </flux:heading>
             
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('feature-groups.delete_confirmation_text') }}
+                {{ __('ecommerce::feature-groups.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

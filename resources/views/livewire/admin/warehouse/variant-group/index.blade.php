@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('variantgroups.title') }}</flux:heading>
-            <flux:subheading>{{ __('variantgroups.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::variantgroups.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::variantgroups.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.variantgroups.create')" wire:navigate>
-            {{ __('variantgroups.add_variantgroup') }}
+            {{ __('ecommerce::variantgroups.add_variantgroup') }}
         </flux:button>
     </div>
 
@@ -29,7 +29,7 @@
         <div class="max-w-sm">
             <flux:input
                 wire:model.live.debounce.300ms="search"
-                placeholder="{{ __('variantgroups.search_placeholder') }}"
+                placeholder="{{ __('ecommerce::variantgroups.search_placeholder') }}"
                 icon="magnifying-glass"
             />
         </div>
@@ -38,9 +38,9 @@
         <flux:table>
             <flux:table.columns>
                 <flux:table.column class="w-10"></flux:table.column>
-                <flux:table.column>{{ __('variantgroups.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('variantgroups.table.type') }}</flux:table.column>
-                <flux:table.column class="w-32">{{ __('variantgroups.table.actions') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::variantgroups.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::variantgroups.table.type') }}</flux:table.column>
+                <flux:table.column class="w-32">{{ __('ecommerce::variantgroups.table.actions') }}</flux:table.column>
             </flux:table.columns>
 
             <flux:table.rows wire:sort="reorder">
@@ -79,7 +79,7 @@
                         <flux:table.cell colspan="4" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
                                 <flux:icon.users class="size-12 text-zinc-300 dark:text-zinc-600" />
-                                <flux:text class="text-zinc-500">{{ __('variantgroups.no_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::variantgroups.no_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -101,11 +101,11 @@
             </div>
             
             <flux:heading size="lg" class="mb-2">
-                {{ __('variantgroups.delete_confirmation_title') }}
+                {{ __('ecommerce::variantgroups.delete_confirmation_title') }}
             </flux:heading>
             
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('variantgroups.delete_confirmation_text') }}
+                {{ __('ecommerce::variantgroups.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

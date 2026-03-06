@@ -2,10 +2,10 @@
     {{-- Header --}}
     <div>
         <flux:heading size="xl">
-            {{ $isEditing ? __('variantgroups.edit_variantgroup') : __('variantgroups.create_variantgroup') }}
+            {{ $isEditing ? __('ecommerce::variantgroups.edit_variantgroup') : __('ecommerce::variantgroups.create_variantgroup') }}
         </flux:heading>
         <flux:subheading>
-            {{ $isEditing ? __('variantgroups.messages.edit_subtitle') : __('variantgroups.messages.create_subtitle') }}
+            {{ $isEditing ? __('ecommerce::variantgroups.messages.edit_subtitle') : __('ecommerce::variantgroups.messages.create_subtitle') }}
         </flux:subheading>
     </div>
 
@@ -20,14 +20,14 @@
                     </div>
 
                     <livewire:lmt-TextInput
-                        label="{{ __('variantgroups.form.name') }}"
-                        placeholder="{{ __('variantgroups.form.name_placeholder') }}"
+                        label="{{ __('ecommerce::variantgroups.form.name') }}"
+                        placeholder="{{ __('ecommerce::variantgroups.form.name_placeholder') }}"
                         wire:model="name"
                         :required="true"
                     />
                     <livewire:lmt-TextInput
-                        label="{{ __('variantgroups.form.tooltip') }}"
-                        placeholder="{{ __('variantgroups.form.tooltip_placeholder') }}"
+                        label="{{ __('ecommerce::variantgroups.form.tooltip') }}"
+                        placeholder="{{ __('ecommerce::variantgroups.form.tooltip_placeholder') }}"
                         wire:model="tooltip"
                         :required="true"
                         rows="3"
@@ -36,8 +36,8 @@
 
                 <flux:select
                     wire:model="type"
-                    :label="__('variantgroups.form.type')"
-                    placeholder="{{ __('variantgroups.form.type_placeholder') }}"
+                    :label="__('ecommerce::variantgroups.form.type')"
+                    placeholder="{{ __('ecommerce::variantgroups.form.type_placeholder') }}"
                     :required="true"
                     variant="listbox"
                 >
@@ -56,7 +56,7 @@
                         {{ __('common.cancel') }}
                     </flux:button>
                     <flux:button variant="primary" type="submit">
-                        {{ $isEditing ? __('variantgroups.update_variantgroup') : __('variantgroups.create_variantgroup') }}
+                        {{ $isEditing ? __('ecommerce::variantgroups.update_variantgroup') : __('ecommerce::variantgroups.create_variantgroup') }}
                     </flux:button>
                 </div>
             </div>

@@ -2,13 +2,13 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('product-categories.title') }}</flux:heading>
-            <flux:subheading>{{ __('product-categories.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::product-categories.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::product-categories.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus"
             :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.product-categories.create')"
             wire:navigate>
-            {{ __('product-categories.add_category') }}
+            {{ __('ecommerce::product-categories.add_category') }}
         </flux:button>
     </div>
 
@@ -29,9 +29,9 @@
         </div>
         <flux:table :paginate="$productCategories">
             <flux:table.columns>
-                <flux:table.column>{{ __('product-categories.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('product-categories.table.description') }}</flux:table.column>
-                <flux:table.column>{{ __('product-categories.table.status') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product-categories.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product-categories.table.description') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product-categories.table.status') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -63,7 +63,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="9" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('product-categories.no_product_categories_found') }}
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::product-categories.no_product_categories_found') }}
                                 </flux:text>
                             </div>
                         </flux:table.cell>
@@ -79,11 +79,11 @@
             </div>
 
             <flux:heading size="lg" class="mb-2">
-                {{ __('product-categories.delete_confirmation_title') }}
+                {{ __('ecommerce::product-categories.delete_confirmation_title') }}
             </flux:heading>
 
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('product-categories.delete_confirmation_text') }}
+                {{ __('ecommerce::product-categories.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

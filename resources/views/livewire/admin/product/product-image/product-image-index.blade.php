@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('product_images.title') }}</flux:heading>
-            <flux:subheading>{{ __('product_images.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::product_images.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::product_images.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.productimages.create')" wire:navigate>
-            {{ __('product_images.add_image') }}
+            {{ __('ecommerce::product_images.add_image') }}
         </flux:button>
     </div>
 
@@ -31,10 +31,10 @@
         </div>
         <flux:table :paginate="$productImages">
             <flux:table.columns>
-                <flux:table.column>{{ __('product_images.table.image') }}</flux:table.column>
-                <flux:table.column>{{ __('product_images.table.product') }}</flux:table.column>
-                <flux:table.column>{{ __('product_images.table.position') }}</flux:table.column>
-                <flux:table.column>{{ __('product_images.table.caption') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product_images.table.image') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product_images.table.product') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product_images.table.position') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::product_images.table.caption') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -68,7 +68,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="5" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('product_images.no_images_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::product_images.no_images_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -84,11 +84,11 @@
             </div>
 
             <flux:heading size="lg" class="mb-2">
-                {{ __('product_images.delete_confirmation_title') }}
+                {{ __('ecommerce::product_images.delete_confirmation_title') }}
             </flux:heading>
 
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('product_images.delete_confirmation_text') }}
+                {{ __('ecommerce::product_images.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

@@ -163,7 +163,7 @@
                             placeholder="{{ __('ecommerce::orders.form.currency_placeholder') }}" variant="listbox" clearable>
                             @foreach ($currencies as $currency)
                                 <flux:select.option value="{{ $currency->id }}">{{ $currency->name }} (
-                                    {{ config('currencies.' . $currency->iso_code) }} )</flux:select.option>
+                                    {{ config('ecommerce::currencies.' . $currency->iso_code) }} )</flux:select.option>
                             @endforeach
                         </flux:select>
 
