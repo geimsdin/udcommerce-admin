@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('target-units.title') }}</flux:heading>
-            <flux:subheading>{{ __('target-units.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::target-units.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::target-units.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.target-units.create')" wire:navigate>
-            {{ __('target-units.add_target_unit') }}
+            {{ __('ecommerce::target-units.add_target_unit') }}
         </flux:button>
     </div>
 
@@ -24,7 +24,7 @@
          x-transition
          x-cloak>
         <flux:callout variant="success" icon="check-circle">
-            {{ __('target-units.target_unit_deleted') }}
+            {{ __('ecommerce::target-units.target_unit_deleted') }}
         </flux:callout>
     </div>
 
@@ -34,7 +34,7 @@
         <div class="max-w-sm">
             <flux:input
                 wire:model.live.debounce.300ms="search"
-                placeholder="{{ __('target-units.search_placeholder') }}"
+                placeholder="{{ __('ecommerce::target-units.search_placeholder') }}"
                 icon="magnifying-glass"
             />
         </div>
@@ -42,9 +42,9 @@
         {{-- Table --}}
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>{{ __('target-units.table.id') }}</flux:table.column>
-                <flux:table.column>{{ __('target-units.table.name') }}</flux:table.column>
-                <flux:table.column class="w-32">{{ __('target-units.table.actions') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::target-units.table.id') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::target-units.table.name') }}</flux:table.column>
+                <flux:table.column class="w-32">{{ __('ecommerce::target-units.table.actions') }}</flux:table.column>
             </flux:table.columns>
 
             <flux:table.rows>
@@ -66,7 +66,7 @@
                                     variant="ghost"
                                     icon="trash"
                                     wire:click="delete({{ $target_unit->id }})"
-                                    wire:confirm="{{ __('target-units.delete_confirm') }}"
+                                    wire:confirm="{{ __('ecommerce::target-units.delete_confirm') }}"
                                     class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                                 />
                             </div>
@@ -77,7 +77,7 @@
                         <flux:table.cell colspan="4" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
                                 <flux:icon.users class="size-12 text-zinc-300 dark:text-zinc-600" />
-                                <flux:text class="text-zinc-500">{{ __('target-units.no_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::target-units.no_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>

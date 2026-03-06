@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('carriers.title') }}</flux:heading>
-            <flux:subheading>{{ __('carriers.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::carriers.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::carriers.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.carriers.create')" wire:navigate>
-            {{ __('carriers.add_carrier') }}
+            {{ __('ecommerce::carriers.add_carrier') }}
         </flux:button>
     </div>
 
@@ -30,9 +30,9 @@
         </div>
         <flux:table :paginate="$carriers">
             <flux:table.columns>
-                <flux:table.column>{{ __('carriers.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('carriers.table.price') }}</flux:table.column>
-                <flux:table.column>{{ __('carriers.table.active') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::carriers.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::carriers.table.price') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::carriers.table.active') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -60,7 +60,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="4" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('carriers.no_carriers_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::carriers.no_carriers_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -75,11 +75,11 @@
             </div>
             
             <flux:heading size="lg" class="mb-2">
-                {{ __('carriers.delete_confirmation_title') }}
+                {{ __('ecommerce::carriers.delete_confirmation_title') }}
             </flux:heading>
             
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('carriers.delete_confirmation_text') }}
+                {{ __('ecommerce::carriers.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

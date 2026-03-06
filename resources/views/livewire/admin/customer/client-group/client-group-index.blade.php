@@ -2,11 +2,11 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('client_groups.title') }}</flux:heading>
-            <flux:subheading>{{ __('client_groups.subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ __('ecommerce::client_groups.title') }}</flux:heading>
+            <flux:subheading>{{ __('ecommerce::client_groups.subtitle') }}</flux:subheading>
         </div>
         <flux:button variant="primary" icon="plus" :href="route(config('ud-ecommerce.admin_route_prefix', 'admin').'.client-groups.create')" wire:navigate>
-            {{ __('client_groups.add_client_group') }}
+            {{ __('ecommerce::client_groups.add_client_group') }}
         </flux:button>
     </div>
 
@@ -30,8 +30,8 @@
         </div>
         <flux:table :paginate="$clientGroups">
             <flux:table.columns>
-                <flux:table.column>{{ __('client_groups.table.name') }}</flux:table.column>
-                <flux:table.column>{{ __('client_groups.table.default') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::client_groups.table.name') }}</flux:table.column>
+                <flux:table.column>{{ __('ecommerce::client_groups.table.default') }}</flux:table.column>
                 <flux:table.column class="w-32">{{ __('common.actions') }}</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
@@ -58,7 +58,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="3" class="text-center py-8">
                             <div class="flex flex-col items-center gap-2">
-                                <flux:text class="text-zinc-500">{{ __('client_groups.no_client_groups_found') }}</flux:text>
+                                <flux:text class="text-zinc-500">{{ __('ecommerce::client_groups.no_client_groups_found') }}</flux:text>
                             </div>
                         </flux:table.cell>
                     </flux:table.row>
@@ -73,11 +73,11 @@
             </div>
             
             <flux:heading size="lg" class="mb-2">
-                {{ __('client_groups.delete_confirmation_title') }}
+                {{ __('ecommerce::client_groups.delete_confirmation_title') }}
             </flux:heading>
             
             <flux:subheading class="mb-6 text-gray-600">
-                {{ __('client_groups.delete_confirmation_text') }}
+                {{ __('ecommerce::client_groups.delete_confirmation_text') }}
             </flux:subheading>
         </div>
 

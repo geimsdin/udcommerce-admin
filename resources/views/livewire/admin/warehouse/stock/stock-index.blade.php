@@ -3,13 +3,13 @@
     <div class="flex flex-col gap-2">
 
         <div class="flex items-center justify-between">
-            <flux:heading size="xl" level="1">{{ __('stocks.title') }}</flux:heading>
+            <flux:heading size="xl" level="1">{{ __('ecommerce::stocks.title') }}</flux:heading>
         </div>
 
         {{-- Tabs --}}
         <flux:tab.group>
             <flux:tabs class="border-b border-zinc-200 dark:border-zinc-700 -mb-px">
-                <flux:tab name="warehouse" :selected="true">{{ __('stocks.tab_warehouse') }}</flux:tab>
+                <flux:tab name="warehouse" :selected="true">{{ __('ecommerce::stocks.tab_warehouse') }}</flux:tab>
             </flux:tabs>
 
             <flux:tab.panel name="warehouse" class="pt-6">
@@ -19,9 +19,9 @@
                         <div class="flex flex-wrap items-end gap-4">
                             <div class="flex flex-1 min-w-[200px] max-w-md items-center gap-2">
                                 <flux:input wire:model.live.debounce.300ms="search"
-                                    placeholder="{{ __('stocks.search_placeholder') }}" class="flex-1" />
+                                    placeholder="{{ __('ecommerce::stocks.search_placeholder') }}" class="flex-1" />
                                 <flux:button variant="primary" icon="magnifying-glass" wire:click="$refresh">
-                                    {{ __('stocks.search_button') }}
+                                    {{ __('ecommerce::stocks.search_button') }}
                                 </flux:button>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                         <div
                             class="flex flex-wrap items-center gap-4 py-3 px-4 rounded-lg bg-zinc-50 dark:bg-zinc-800/50">
                             <span
-                                class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ __('stocks.bulk_quantity_label') }}</span>
+                                class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ __('ecommerce::stocks.bulk_quantity_label') }}</span>
                             <flux:checkbox :checked="$allPageSelected"
                                 wire:click="toggleSelectPage({{ json_encode($pageRowKeys) }})" />
                             <flux:input type="number" wire:model="bulkQuantity" min="0" class="w-24" />
                             <flux:button variant="outline" icon="pencil" wire:click="applyBulkQuantity">
-                                {{ __('stocks.apply_new_quantity') }}
+                                {{ __('ecommerce::stocks.apply_new_quantity') }}
                             </flux:button>
                         </div>
                         @if (session('status'))
@@ -71,14 +71,14 @@
                         <flux:table>
                             <flux:table.columns>
                                 <flux:table.column class="w-10"></flux:table.column>
-                                <flux:table.column sortable>{{ __('stocks.table.product') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.reference') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.supplier') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.status') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.physical') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.reserved') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.available') }}</flux:table.column>
-                                <flux:table.column>{{ __('stocks.modify_quantity') }}</flux:table.column>
+                                <flux:table.column sortable>{{ __('ecommerce::stocks.table.product') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.reference') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.supplier') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.status') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.physical') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.reserved') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.available') }}</flux:table.column>
+                                <flux:table.column>{{ __('ecommerce::stocks.modify_quantity') }}</flux:table.column>
                             </flux:table.columns>
 
                             @forelse ($products as $product)
@@ -120,7 +120,7 @@
                                                         class="text-sm font-medium">{{ $product->getNameCurrentLanguage($selected_language) }}</span>
                                                     <span
                                                         class="text-xs text-zinc-500 dark:text-zinc-400">({{ $product->variations->count() }}
-                                                        {{ __('stocks.table.variant') }})</span>
+                                                        {{ __('ecommerce::stocks.table.variant') }})</span>
                                                 </div>
                                             </flux:table.cell>
                                             <flux:table.cell class="text-sm text-zinc-500">—</flux:table.cell>
@@ -277,7 +277,7 @@
                                         <flux:table.cell colspan="9" class="text-center py-12">
                                             <div class="flex flex-col items-center gap-2">
                                                 <flux:icon.cube class="size-12 text-zinc-300 dark:text-zinc-600" />
-                                                <flux:text class="text-zinc-500">{{ __('stocks.no_found') }}
+                                                <flux:text class="text-zinc-500">{{ __('ecommerce::stocks.no_found') }}
                                                 </flux:text>
                                             </div>
                                         </flux:table.cell>

@@ -2,8 +2,8 @@
     {{-- Header --}}
     <div class="flex items-center justify-between mb-4">
         <div>
-            <flux:heading size="xl">{{ $isEditing ? __('currencies.edit_currency') : __('currencies.create_currency') }}</flux:heading>
-            <flux:subheading>{{ $isEditing ? __('currencies.messages.edit_subtitle') : __('currencies.messages.create_subtitle') }}</flux:subheading>
+            <flux:heading size="xl">{{ $isEditing ? __('ecommerce::currencies.edit_currency') : __('ecommerce::currencies.create_currency') }}</flux:heading>
+            <flux:subheading>{{ $isEditing ? __('ecommerce::currencies.messages.edit_subtitle') : __('ecommerce::currencies.messages.create_subtitle') }}</flux:subheading>
         </div>
     </div>
 
@@ -11,11 +11,11 @@
     <flux:card>
         <form wire:submit="save" class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
-                <flux:input wire:model="name" :label="__('currencies.form.name')" placeholder="{{ __('currencies.form.name_placeholder') }}" :badge="__('common.required')"/>
-                <flux:input wire:model="iso_code" :label="__('currencies.form.code')" placeholder="{{ __('currencies.form.code_placeholder') }}" :badge="__('common.required')"/>
-                <flux:input wire:model="exchange_rate" :label="__('currencies.form.exchange_rate')" placeholder="{{ __('currencies.form.exchange_rate_placeholder') }}" :disabled="$default"/>
+                <flux:input wire:model="name" :label="__('ecommerce::currencies.form.name')" placeholder="{{ __('ecommerce::currencies.form.name_placeholder') }}" :badge="__('common.required')"/>
+                <flux:input wire:model="iso_code" :label="__('ecommerce::currencies.form.code')" placeholder="{{ __('ecommerce::currencies.form.code_placeholder') }}" :badge="__('common.required')"/>
+                <flux:input wire:model="exchange_rate" :label="__('ecommerce::currencies.form.exchange_rate')" placeholder="{{ __('ecommerce::currencies.form.exchange_rate_placeholder') }}" :disabled="$default"/>
                 <div class="flex items-center gap-2">
-                    <flux:switch wire:model.live="default" :label="__('currencies.form.default')" />
+                    <flux:switch wire:model.live="default" :label="__('ecommerce::currencies.form.default')" />
                 </div>
             </div>
             <flux:separator />
@@ -24,7 +24,7 @@
                     {{ __('common.cancel') }}
                 </flux:button>
                 <flux:button variant="primary" type="submit">
-                    {{ $isEditing ? __('currencies.update_currency') : __('currencies.create_currency') }}
+                    {{ $isEditing ? __('ecommerce::currencies.update_currency') : __('ecommerce::currencies.create_currency') }}
                 </flux:button>
             </div>
         </form>
