@@ -109,6 +109,17 @@ class ProductCreateEdit extends Component
 
     public bool $unlimitedDuration = false;
 
+    // Subscription settings
+    public ?int $subscription_duration = null;
+
+    public ?string $subscription_duration_unit = null;
+
+    public ?string $subscription_renewal_type = 'auto';
+
+    public ?int $subscription_trial_days = null;
+
+    public bool $subscription_is_infinite = false;
+
     public bool $applyDiscount = false;
 
     public bool $setSpecificPrice = false;
@@ -137,6 +148,12 @@ class ProductCreateEdit extends Component
             $this->low_stock_alert = $product->low_stock_alert;
             $this->minimal_quantity = $product->minimal_quantity;
             $this->quantity = $product->quantity;
+            // Subscription fields
+            $this->subscription_duration = $product->subscription_duration;
+            $this->subscription_duration_unit = $product->subscription_duration_unit;
+            $this->subscription_renewal_type = $product->subscription_renewal_type;
+            $this->subscription_trial_days = $product->subscription_trial_days;
+            $this->subscription_is_infinite = (bool) ($product->subscription_is_infinite ?? false);
             $this->category_ids = $product->categories->pluck('id')->toArray();
             $this->season_ids = $product->seasons->pluck('id')->toArray();
             $this->loadProductFeatures();
@@ -516,6 +533,7 @@ class ProductCreateEdit extends Component
             'simple' => __('ecommerce::products.form.product_type_simple'),
             'virtual' => __('ecommerce::products.form.product_type_virtual'),
             'variable' => __('ecommerce::products.form.product_type_variable'),
+            'subscription' => __('ecommerce::products.form.product_type_subscription'),
         ];
     }
 
@@ -832,6 +850,28 @@ class ProductCreateEdit extends Component
             'quantity' => $this->quantity,
             'price' => $this->price,
         ];
+
+        // Normalize subscription fields for subscription products
+        if ($this->product_type === 'subscription') {
+            if ($this->subscription_is_infinite) {
+                $fields['subscription_duration'] = null;
+                $fields['subscription_duration_unit'] = null;
+            } else {
+                $fields['subscription_duration'] = $this->subscription_duration;
+                $fields['subscription_duration_unit'] = $this->subscription_duration_unit;
+            }
+
+            $fields['subscription_renewal_type'] = $this->subscription_renewal_type;
+            $fields['subscription_trial_days'] = $this->subscription_trial_days;
+            $fields['subscription_is_infinite'] = $this->subscription_is_infinite;
+        } else {
+            // Clear subscription fields when not a subscription product
+            $fields['subscription_duration'] = null;
+            $fields['subscription_duration_unit'] = null;
+            $fields['subscription_renewal_type'] = null;
+            $fields['subscription_trial_days'] = null;
+            $fields['subscription_is_infinite'] = false;
+        }
         if (! $this->product->exists) {
             $this->product = Product::create($fields);
         } else {

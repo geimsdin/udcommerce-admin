@@ -131,6 +131,65 @@
                                             <flux:select.option :value="$key">{{ $product_type_label }}</flux:select.option>
                                         @endforeach
                                     </flux:select>
+                                    @if($product_type === 'subscription')
+                                        <flux:separator class="my-2" />
+                                        <div class="space-y-3">
+                                            <flux:heading size="sm" class="text-zinc-900 dark:text-zinc-100">
+                                                {{ __('ecommerce::products.form.subscription_settings') }}
+                                            </flux:heading>
+                                            <flux:subheading class="text-zinc-500 dark:text-zinc-400">
+                                                {{ __('ecommerce::products.form.subscription_settings_subtitle') }}
+                                            </flux:subheading>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div class="flex items-center gap-3">
+                                                    <flux:switch 
+                                                        :label="__('ecommerce::products.form.subscription_is_infinite')" 
+                                                        wire:model="subscription_is_infinite"
+                                                    />
+                                                </div>
+                                                <div class="grid grid-cols-[1fr,1fr] gap-3">
+                                                    <flux:input
+                                                        type="number"
+                                                        min="1"
+                                                        wire:model="subscription_duration"
+                                                        :label="__('ecommerce::products.form.subscription_duration')"
+                                                        :placeholder="__('ecommerce::products.form.subscription_duration_placeholder')"
+                                                        :disabled="$subscription_is_infinite"
+                                                    />
+                                                    <flux:select
+                                                        variant="listbox"
+                                                        wire:model="subscription_duration_unit"
+                                                        :label="__('ecommerce::products.form.subscription_duration_unit')"
+                                                        :placeholder="__('ecommerce::products.form.subscription_duration_unit_placeholder')"
+                                                        :disabled="$subscription_is_infinite"
+                                                    >
+                                                        <flux:select.option value="day">{{ __('ecommerce::products.form.subscription_duration_unit_day') }}</flux:select.option>
+                                                        <flux:select.option value="week">{{ __('ecommerce::products.form.subscription_duration_unit_week') }}</flux:select.option>
+                                                        <flux:select.option value="month">{{ __('ecommerce::products.form.subscription_duration_unit_month') }}</flux:select.option>
+                                                        <flux:select.option value="year">{{ __('ecommerce::products.form.subscription_duration_unit_year') }}</flux:select.option>
+                                                    </flux:select>
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <flux:select
+                                                    variant="listbox"
+                                                    wire:model="subscription_renewal_type"
+                                                    :label="__('ecommerce::products.form.subscription_renewal_type')"
+                                                    :placeholder="__('ecommerce::products.form.subscription_renewal_type_placeholder')"
+                                                >
+                                                    <flux:select.option value="auto">{{ __('ecommerce::products.form.subscription_renewal_auto') }}</flux:select.option>
+                                                    <flux:select.option value="manual">{{ __('ecommerce::products.form.subscription_renewal_manual') }}</flux:select.option>
+                                                </flux:select>
+                                                <flux:input
+                                                    type="number"
+                                                    min="0"
+                                                    wire:model="subscription_trial_days"
+                                                    :label="__('ecommerce::products.form.subscription_trial_days')"
+                                                    :placeholder="__('ecommerce::products.form.subscription_trial_days_placeholder')"
+                                                />
+                                            </div>
+                                        </div>
+                                    @endif
                                     <flux:select 
                                         variant="listbox" 
                                         :required="true" 
