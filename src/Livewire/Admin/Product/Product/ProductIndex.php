@@ -48,6 +48,7 @@ class ProductIndex extends Component
             'simple' => __('ecommerce::products.form.product_type_simple'),
             'virtual' => __('ecommerce::products.form.product_type_virtual'),
             'variable' => __('ecommerce::products.form.product_type_variable'),
+            'subscription' => __('ecommerce::products.form.product_type_subscription'),
         ];
     }
 
