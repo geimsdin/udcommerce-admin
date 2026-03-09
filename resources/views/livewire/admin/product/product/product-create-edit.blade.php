@@ -18,6 +18,7 @@
             {{ __('ecommerce::products.back_to_list') }}
         </flux:button>
     </div>
+    
     {{-- Flash Messages --}}
     <div class="space-y-3">
         @if (session('success'))
